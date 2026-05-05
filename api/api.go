@@ -14,6 +14,8 @@ type World interface {
 
 // Block represents a single block in the world.
 type Block interface {
+	// Name returns the identifier of the block (e.g., "minecraft:stone").
+	Name() string
 	// Solid returns true if the block is solid.
 	Solid() bool
 	// Passable returns true if an entity can walk through this block.
@@ -32,4 +34,8 @@ type Entity interface {
 	SetRotation(yaw, pitch float32)
 	// ID returns a unique identifier for the entity.
 	ID() int64
+	// HideInBlock hides the entity inside a block at the given position.
+	HideInBlock(pos math.Pos)
+	// AlertOthers signals other entities of the same type within a range.
+	AlertOthers(rangeX, rangeY, rangeZ int)
 }
