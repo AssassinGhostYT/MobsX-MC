@@ -1,0 +1,101 @@
+package pathfinding
+
+import (
+	"container/heap"
+	"github.com/AssassinGhostYT/MobsX-MC/internal/math"
+	"github.com/AssassinGhostYT/MobsX-MC"
+)
+
+type Node struct {
+	Pos    math.Pos
+	Parent *Node
+	G, H   float64
+}
+
+func (n *Node) F() float64 { return n.G + n.H }
+
+type Path struct {
+	Nodes []math.Pos
+	Index int
+}
+
+func (p *Path) Next() (math.Pos, bool) {
+	if p.Index >= len(p.Nodes) {
+		return math.Pos{}, false
+	}
+	pos := p.Nodes[p.Index]
+	p.Index++
+	return pos, true
+}
+
+type Finder struct {
+	w mobsx.World
+}
+
+func NewFinder(w mobsx.World) *Finder {
+	return &Finder{w: w}
+}
+
+func (f *Finder) FindPath(start, end math.Pos) (Path, bool) {
+	openSet := &priorityQueue{}
+	heap.Init(openSet)
+	heap.Push(openSet, &Node{Pos: start, G: 0, H: start.Distance(end)})
+
+	closedSet := make(map[math.Pos]struct{})
+
+	for openSet.Len() > 0 {
+		current := heap.Pop(openSet).(*Node)
+		if current.Pos == end {
+			return f.reconstructPath(current), true
+		}
+		closedSet[current.Pos] = struct{}{}
+		for i := 0; i < 6; i++ {
+			neighborPos := current.Pos.Side(i)
+			if _, ok := closedSet[neighborPos]; ok {
+				continue
+			}
+			if !f.isWalkable(neighborPos) {
+				continue
+			}
+			gScore := current.G + 1
+			neighborNode := &Node{
+				Pos:    neighborPos,
+				Parent: current,
+				G:      gScore,
+				H:      neighborPos.Distance(end),
+			}
+			heap.Push(openSet, neighborNode)
+		}
+	}
+	return Path{}, false
+}
+
+func (f *Finder) isWalkable(pos math.Pos) bool {
+	b := f.w.Block(pos)
+	if b.Solid() { return false }
+	below := f.w.Block(pos.Side(0)) // Side 0 = Down
+	return below.Solid()
+}
+
+func (f *Finder) reconstructPath(endNode *Node) Path {
+	nodes := []math.Pos{}
+	curr := endNode
+	for curr != nil {
+		nodes = append([]math.Pos{curr.Pos}, nodes...)
+		curr = curr.Parent
+	}
+	return Path{Nodes: nodes}
+}
+
+type priorityQueue []*Node
+func (pq priorityQueue) Len() int { return len(pq) }
+func (pq priorityQueue) Less(i, j int) bool { return pq[i].F() < pq[j].F() }
+func (pq priorityQueue) Swap(i, j int) { pq[i], pq[j] = pq[j], pq[i] }
+func (pq *priorityQueue) Push(x any) { *pq = append(*pq, x.(*Node)) }
+func (pq *priorityQueue) Pop() any {
+	old := *pq
+	n := len(old)
+	item := old[n-1]
+	*pq = old[0 : n-1]
+	return item
+}
