@@ -6,7 +6,7 @@ It provides a modular "Brain" system that allows developers to give life to enti
 
 ## Features 🚀
 
-- **Independent**: Works with any Go server (Dragonfly, etc.) through a clean API interface.
+- **Independent**: Works with any Minecraft Bedrock server written in Go through a clean API interface.
 - **GPS Navigation (A*)**: High-speed pathfinding algorithm that calculates 3D routes avoiding obstacles.
 - **Priority Brain**: Entities decide their actions based on importance (e.g., *Attacking* > *Wandering*).
 - **Modular Behaviors**: Easy to add new logic like Chase, Flee, Idle, or Breed.
@@ -44,12 +44,5 @@ brain.AddBehavior(behavior.NewWander(navigator, 10))
 // In your entity Tick function:
 brain.Tick(myZombie, myWorld)
 ```
-
-## Credits 📚
-
-This project takes inspiration from and ports the proven logic of:
-- **PureEntitiesX**: State machine logic (PHP).
-- **Baritone**: Advanced A* pathfinding concepts (Java).
-- **Dragonfly**: Entity interaction and structure (Go).
 
 Developed with ❤️ by **AssassinGhostYT**.
