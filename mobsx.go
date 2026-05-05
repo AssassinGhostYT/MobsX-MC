@@ -1,38 +1,42 @@
 package mobsx
 
+import (
+	"github.com/AssassinGhostYT/MobsX-MC/api"
+)
+
 // Sensor gathers information from the world.
 type Sensor interface {
-	Scan(e Entity, w World) bool
+	Scan(e api.Entity, w api.World) bool
 }
 
 // Behavior defines a goal or action.
 type Behavior interface {
 	Priority() int
-	CanRun(e Entity, w World) bool
-	Run(e Entity, w World)
+	CanRun(e api.Entity, w api.World) bool
+	Run(e api.Entity, w api.World)
 }
 
-// MobsX is the main AI controller.
-type MobsX struct {
+// Brain is the main AI controller.
+type Brain struct {
 	sensors   []Sensor
 	behaviors []Behavior
 	
 	activeBehavior Behavior
 }
 
-func New() *MobsX {
-	return &MobsX{}
+func NewBrain() *Brain {
+	return &Brain{}
 }
 
-func (m *MobsX) AddSensor(s Sensor) {
+func (m *Brain) AddSensor(s Sensor) {
 	m.sensors = append(m.sensors, s)
 }
 
-func (m *MobsX) AddBehavior(b Behavior) {
+func (m *Brain) AddBehavior(b Behavior) {
 	m.behaviors = append(m.behaviors, b)
 }
 
-func (m *MobsX) Tick(e Entity, w World) {
+func (m *Brain) Tick(e api.Entity, w api.World) {
 	for _, s := range m.sensors {
 		s.Scan(e, w)
 	}

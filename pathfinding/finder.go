@@ -2,8 +2,8 @@ package pathfinding
 
 import (
 	"container/heap"
+	"github.com/AssassinGhostYT/MobsX-MC/api"
 	"github.com/AssassinGhostYT/MobsX-MC/internal/math"
-	"github.com/AssassinGhostYT/MobsX-MC"
 )
 
 type Node struct {
@@ -28,11 +28,15 @@ func (p *Path) Next() (math.Pos, bool) {
 	return pos, true
 }
 
-type Finder struct {
-	w mobsx.World
+func (p *Path) AtEnd() bool {
+	return p.Index >= len(p.Nodes)
 }
 
-func NewFinder(w mobsx.World) *Finder {
+type Finder struct {
+	w api.World
+}
+
+func NewFinder(w api.World) *Finder {
 	return &Finder{w: w}
 }
 
