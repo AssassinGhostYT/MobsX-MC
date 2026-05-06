@@ -2,7 +2,7 @@ package behavior
 
 import (
 	"github.com/AssassinGhostYT/MobsX-MC/api"
-	"github.com/AssassinGhostYT/MobsX-MC/internal/math"
+	"github.com/AssassinGhostYT/MobsX-MC/mmath"
 	"github.com/AssassinGhostYT/MobsX-MC"
 	"github.com/AssassinGhostYT/MobsX-MC/sensor"
 	goMath "math"
@@ -62,7 +62,7 @@ func (a *AttackBehavior) Run(e api.Entity, world api.World) {
 	}
 
 	// Otherwise, chase the player using the navigator
-	tPos := math.Pos{int(goMath.Floor(targetPos[0])), int(goMath.Floor(targetPos[1])), int(goMath.Floor(targetPos[2]))}
+	tPos := mmath.Pos{int(goMath.Floor(targetPos[0])), int(goMath.Floor(targetPos[1])), int(goMath.Floor(targetPos[2]))}
 	
 	// Recalculate path only if target moved or we have no path
 	if a.navigator.Path.AtEnd() {

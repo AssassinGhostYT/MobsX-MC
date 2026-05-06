@@ -1,13 +1,13 @@
 package api
 
 import (
-	"github.com/AssassinGhostYT/MobsX-MC/internal/math"
+	"github.com/AssassinGhostYT/MobsX-MC/mmath"
 )
 
 // World represents a 3D world that can be queried for block and entity information.
 type World interface {
 	// Block returns the block at the given position.
-	Block(pos math.Pos) Block
+	Block(pos mmath.Pos) Block
 	// Entities returns all entities in the world.
 	Entities() []Entity
 }
@@ -35,7 +35,7 @@ type Entity interface {
 	// ID returns a unique identifier for the entity.
 	ID() int64
 	// HideInBlock hides the entity inside a block at the given position.
-	HideInBlock(pos math.Pos)
+	HideInBlock(pos mmath.Pos)
 	// AlertOthers signals other entities of the same type within a range.
 	AlertOthers(rangeX, rangeY, rangeZ int)
 }

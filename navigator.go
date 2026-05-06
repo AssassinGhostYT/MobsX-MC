@@ -2,7 +2,7 @@ package mobsx
 
 import (
 	"github.com/AssassinGhostYT/MobsX-MC/api"
-	"github.com/AssassinGhostYT/MobsX-MC/internal/math"
+	"github.com/AssassinGhostYT/MobsX-MC/mmath"
 	"github.com/AssassinGhostYT/MobsX-MC/pathfinding"
 	goMath "math"
 )
@@ -28,9 +28,9 @@ func NewNavigator(e api.Entity, w api.World) *Navigator {
 }
 
 // SetTarget calculates a new path to the target position.
-func (n *Navigator) SetTarget(target math.Pos) bool {
+func (n *Navigator) SetTarget(target mmath.Pos) bool {
 	pos := n.entity.Position()
-	start := math.Pos{int(goMath.Floor(pos[0])), int(goMath.Floor(pos[1])), int(goMath.Floor(pos[2]))}
+	start := mmath.Pos{int(goMath.Floor(pos[0])), int(goMath.Floor(pos[1])), int(goMath.Floor(pos[2]))}
 	
 	path, ok := n.finder.FindPath(start, target)
 	if ok {

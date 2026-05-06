@@ -3,11 +3,11 @@ package pathfinding
 import (
 	"container/heap"
 	"github.com/AssassinGhostYT/MobsX-MC/api"
-	"github.com/AssassinGhostYT/MobsX-MC/internal/math"
+	"github.com/AssassinGhostYT/MobsX-MC/mmath"
 )
 
 type Node struct {
-	Pos    math.Pos
+	Pos    mmath.Pos
 	Parent *Node
 	G, H   float64
 }
@@ -15,13 +15,13 @@ type Node struct {
 func (n *Node) F() float64 { return n.G + n.H }
 
 type Path struct {
-	Nodes []math.Pos
+	Nodes []mmath.Pos
 	Index int
 }
 
-func (p *Path) Next() (math.Pos, bool) {
+func (p *Path) Next() (mmath.Pos, bool) {
 	if p.Index >= len(p.Nodes) {
-		return math.Pos{}, false
+		return mmath.Pos{}, false
 	}
 	pos := p.Nodes[p.Index]
 	p.Index++
@@ -40,12 +40,12 @@ func NewFinder(w api.World) *Finder {
 	return &Finder{w: w}
 }
 
-func (f *Finder) FindPath(start, end math.Pos) (Path, bool) {
+func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 	openSet := &priorityQueue{}
 	heap.Init(openSet)
 	heap.Push(openSet, &Node{Pos: start, G: 0, H: start.Distance(end)})
 
-	closedSet := make(map[math.Pos]struct{})
+	closedSet := make(map[mmath.Pos]struct{})
 
 	for openSet.Len() > 0 {
 		current := heap.Pop(openSet).(*Node)
@@ -74,7 +74,7 @@ func (f *Finder) FindPath(start, end math.Pos) (Path, bool) {
 	return Path{}, false
 }
 
-func (f *Finder) isWalkable(pos math.Pos) bool {
+func (f *Finder) isWalkable(pos mmath.Pos) bool {
 	b := f.w.Block(pos)
 	if b.Solid() { return false }
 	below := f.w.Block(pos.Side(0)) // Side 0 = Down
@@ -82,10 +82,10 @@ func (f *Finder) isWalkable(pos math.Pos) bool {
 }
 
 func (f *Finder) reconstructPath(endNode *Node) Path {
-	nodes := []math.Pos{}
+	nodes := []mmath.Pos{}
 	curr := endNode
 	for curr != nil {
-		nodes = append([]math.Pos{curr.Pos}, nodes...)
+		nodes = append([]mmath.Pos{curr.Pos}, nodes...)
 		curr = curr.Parent
 	}
 	return Path{Nodes: nodes}
