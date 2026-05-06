@@ -27,6 +27,12 @@ func NewNavigator(e api.Entity, w api.World) *Navigator {
 	}
 }
 
+// Sync updates the current world reference to ensure fresh transactions.
+func (n *Navigator) Sync(w api.World) {
+	n.world = w
+	n.finder.SetWorld(w)
+}
+
 // SetTarget calculates a new path to the target position.
 func (n *Navigator) SetTarget(target mmath.Pos) bool {
 	pos := n.entity.Position()

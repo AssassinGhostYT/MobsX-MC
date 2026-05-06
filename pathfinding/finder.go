@@ -40,6 +40,10 @@ func NewFinder(w api.World) *Finder {
 	return &Finder{w: w}
 }
 
+func (f *Finder) SetWorld(w api.World) {
+	f.w = w
+}
+
 func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 	openSet := &priorityQueue{}
 	heap.Init(openSet)
