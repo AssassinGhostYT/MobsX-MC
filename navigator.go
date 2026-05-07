@@ -70,10 +70,13 @@ func (n *Navigator) Tick() {
 	newZ := currentPos[2] + goMath.Sin(angle)*n.Speed
 	
 	newY := currentPos[1]
-	if dy > 0 && dy <= 1.2 {
-		newY += 0.3 
-	} else if dy < 0 {
-		newY -= 0.1 
+	// Comprobamos si el bloque delante es sólido para saltar (stepHeight 1.0)
+	checkPos := mmath.Pos{int(goMath.Floor(newX)), int(goMath.Floor(currentPos[1])), int(goMath.Floor(newZ))}
+	if n.world.Block(checkPos).Solid() {
+		newY += 0.4 // Salto pequeño para subir el bloque
+	} else if dy < -0.5 {
+		// Si el objetivo está abajo, permitimos caer suavemente
+		newY -= 0.1
 	}
 
 	n.entity.SetPosition([3]float64{newX, newY, newZ})
