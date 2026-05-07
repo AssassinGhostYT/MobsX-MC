@@ -86,9 +86,17 @@ func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 
 func (f *Finder) isWalkable(pos mmath.Pos) bool {
 	b := f.w.Block(pos)
-	if b.Solid() { return false }
-	below := f.w.Block(pos.Side(0)) // Side 0 = Down
-	return below.Solid()
+	if b.Solid() {
+		return false
+	}
+	// Mojang Spec: Silverfish climb walls.
+	// Is walkable if ANY adjacent block is solid (wall or floor).
+	for i := 0; i < 6; i++ {
+		if f.w.Block(pos.Side(i)).Solid() {
+			return true
+		}
+	}
+	return false
 }
 
 func (f *Finder) reconstructPath(endNode *Node) Path {
