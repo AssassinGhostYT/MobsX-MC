@@ -7,13 +7,11 @@ import (
 	"math/rand/v2"
 )
 
-// WanderBehavior makes an entity walk around aimlessly.
 type WanderBehavior struct {
 	Radius    int
 	navigator *mobsx.Navigator
 }
 
-// NewWander creates a new wander behavior.
 func NewWander(n *mobsx.Navigator, radius int) *WanderBehavior {
 	return &WanderBehavior{
 		Radius:    radius,
@@ -28,7 +26,6 @@ func (w *WanderBehavior) CanRun(e api.Entity, world api.World) bool {
 }
 
 func (w *WanderBehavior) Run(e api.Entity, world api.World) {
-	// If the entity is not moving, pick a new random spot
 	if w.navigator.Path.AtEnd() {
 		pos := e.Position()
 		target := mmath.Pos{
@@ -37,7 +34,6 @@ func (w *WanderBehavior) Run(e api.Entity, world api.World) {
 			int(pos[2]) + rand.IntN(w.Radius*2) - w.Radius,
 		}
 		
-		// Try to find a walkable spot near the random target
 		for y := 2; y >= -2; y-- {
 			check := target
 			check[1] += y
@@ -56,6 +52,6 @@ func (w *WanderBehavior) isWalkable(pos mmath.Pos, world api.World) bool {
 	if b.Solid() {
 		return false
 	}
-	below := world.Block(pos.Side(0)) // Down
+	below := world.Block(pos.Side(0))
 	return below.Solid()
 }

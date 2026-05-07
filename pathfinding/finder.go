@@ -54,7 +54,7 @@ func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 
 	for openSet.Len() > 0 {
 		iterations++
-		if iterations > 1000 { // Seguridad: Evitar que el servidor se congele
+		if iterations > 1000 {
 			return Path{}, false
 		}
 		
@@ -63,14 +63,26 @@ func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 			return f.reconstructPath(current), true
 		}
 		closedSet[current.Pos] = struct{}{}
+		
 		for i := 0; i < 6; i++ {
 			neighborPos := current.Pos.Side(i)
 			if _, ok := closedSet[neighborPos]; ok {
 				continue
 			}
+			
 			if !f.isWalkable(neighborPos) {
-				continue
+				if i != 0 && i != 1 {
+					up := neighborPos.Side(1)
+					if f.isWalkable(up) {
+						neighborPos = up
+					} else {
+						continue
+					}
+				} else {
+					continue
+				}
 			}
+
 			gScore := current.G + 1
 			neighborNode := &Node{
 				Pos:    neighborPos,
@@ -89,9 +101,7 @@ func (f *Finder) isWalkable(pos mmath.Pos) bool {
 	if b.Solid() {
 		return false
 	}
-	// Solo es caminable si hay un bloque sólido debajo (suelo).
-	// Esto impide que escale paredes como una araña.
-	below := f.w.Block(pos.Side(0)) // Side 0 = Down
+	below := f.w.Block(pos.Side(0))
 	return below.Solid()
 }
 
