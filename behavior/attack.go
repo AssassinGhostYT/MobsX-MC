@@ -68,9 +68,16 @@ func (a *AttackBehavior) Run(e api.Entity, world api.World) {
 	tPos := mmath.Pos{int(goMath.Floor(targetPos[0])), int(goMath.Floor(targetPos[1])), int(goMath.Floor(targetPos[2]))}
 	
 	// Recalculate path if target moved or we have no path
-	if a.navigator.Path.AtEnd() {
+	targetPosVec := mmath.Vec3{targetPos[0], targetPos[1], targetPos[2]}
+	var distToPathEnd float64 = 999
+	if len(a.navigator.Path.Nodes) > 0 {
+		endNode := a.navigator.Path.Nodes[len(a.navigator.Path.Nodes)-1]
+		distToPathEnd = targetPosVec.Distance(mmath.Vec3{float64(endNode.X()), float64(endNode.Y()), float64(endNode.Z())})
+	}
+
+	if a.navigator.Path.AtEnd() || distToPathEnd > 1.5 {
 		a.navigator.SetTarget(tPos)
 	}
-	
+
 	a.navigator.Tick()
-}
+	}

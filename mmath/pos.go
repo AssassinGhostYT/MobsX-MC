@@ -2,6 +2,13 @@ package mmath
 
 import "math"
 
+// Vec3 represents a 3D vector.
+type Vec3 [3]float64
+
+func (v Vec3) Distance(other Vec3) float64 {
+	return math.Sqrt((v[0]-other[0])*(v[0]-other[0]) + (v[1]-other[1])*(v[1]-other[1]) + (v[2]-other[2])*(v[2]-other[2]))
+}
+
 // Pos represents a position in a 3D grid.
 type Pos [3]int
 
