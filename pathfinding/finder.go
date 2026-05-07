@@ -50,8 +50,14 @@ func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 	heap.Push(openSet, &Node{Pos: start, G: 0, H: start.Distance(end)})
 
 	closedSet := make(map[mmath.Pos]struct{})
+	iterations := 0
 
 	for openSet.Len() > 0 {
+		iterations++
+		if iterations > 1000 { // Seguridad: Evitar que el servidor se congele
+			return Path{}, false
+		}
+		
 		current := heap.Pop(openSet).(*Node)
 		if current.Pos == end {
 			return f.reconstructPath(current), true
