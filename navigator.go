@@ -73,13 +73,12 @@ func (n *Navigator) Tick() {
 	// Comprobamos si el bloque delante es sólido para saltar (stepHeight 1.0)
 	checkPos := mmath.Pos{int(goMath.Floor(newX)), int(goMath.Floor(currentPos[1])), int(goMath.Floor(newZ))}
 	
-	// Solo saltamos si la diferencia de altura con el siguiente nodo es de 1 bloque exacto.
-	// Si estás a 2 bloques de altura, el mob no podrá subir.
-	if n.world.Block(checkPos).Solid() && dy > 0 && dy <= 1.2 {
-		newY += 0.4 
-	} else if dy < -0.5 {
-		// Si el objetivo está abajo, permitimos caer suavemente
-		newY -= 0.1
+	// Si hay un bloque sólido en los pies, intentamos subirlo si el objetivo está arriba o al mismo nivel.
+	if n.world.Block(checkPos).Solid() && dy >= -0.5 {
+		newY += 0.5 // Salto para subir el bloque
+	} else if dy < -1.0 {
+		// Si el objetivo está mucho más abajo, bajamos un poco más rápido.
+		newY -= 0.15
 	}
 
 	n.entity.SetPosition([3]float64{newX, newY, newZ})
