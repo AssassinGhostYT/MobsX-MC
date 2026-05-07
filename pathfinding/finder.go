@@ -70,17 +70,22 @@ func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 				continue
 			}
 			
-			if !f.isWalkable(neighborPos) {
-				if i != 0 && i != 1 {
-					up := neighborPos.Side(1)
-					if f.isWalkable(up) {
-						neighborPos = up
+			// Si el vecino es sólido, intentamos subir (si no es el movimiento hacia arriba/abajo ya)
+			if i > 1 && !f.isWalkable(neighborPos) {
+				up := neighborPos.Side(1)
+				if f.isWalkable(up) && !f.w.Block(current.Pos.Side(1)).Solid() {
+					neighborPos = up
+				} else {
+					// Si no es transitable, probamos si es un escalón hacia abajo
+					down := neighborPos.Side(0)
+					if f.isWalkable(down) {
+						neighborPos = down
 					} else {
 						continue
 					}
-				} else {
-					continue
 				}
+			} else if i <= 1 && !f.isWalkable(neighborPos) {
+				continue
 			}
 
 			gScore := current.G + 1
