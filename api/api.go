@@ -34,6 +34,8 @@ type Entity interface {
 	SetRotation(yaw, pitch float32)
 	// ID returns a unique identifier for the entity.
 	ID() int64
+	// IsPlayer returns true if the entity is a player.
+	IsPlayer() bool
 	// HideInBlock hides the entity inside a block at the given position.
 	HideInBlock(pos mmath.Pos)
 	// AlertOthers signals other entities of the same type within a range.

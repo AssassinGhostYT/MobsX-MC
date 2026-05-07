@@ -31,7 +31,7 @@ func (s *PlayerSensor) Scan(e api.Entity, w api.World) bool {
 		dz := pos[2] - oPos[2]
 		dist := math.Sqrt(dx*dx + dy*dy + dz*dz)
 		
-		if dist <= s.Range {
+		if dist <= s.Range && other.IsPlayer() {
 			s.Detected = append(s.Detected, other)
 		}
 	}
