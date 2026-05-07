@@ -16,10 +16,11 @@ type InfestBehavior struct {
 var infestableBlocks = []string{
 	"minecraft:stone",
 	"minecraft:cobblestone",
-	"minecraft:stonebrick",
-	"minecraft:mossy_stone_brick",
-	"minecraft:cracked_stone_brick",
-	"minecraft:chiseled_stone_brick",
+	"minecraft:deepslate",
+	"minecraft:stone_bricks",
+	"minecraft:mossy_stone_bricks",
+	"minecraft:cracked_stone_bricks",
+	"minecraft:chiseled_stone_bricks",
 }
 
 func (i *InfestBehavior) Priority() int { return 2 }
