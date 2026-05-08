@@ -75,12 +75,11 @@ func (n *Navigator) Tick() {
 	
 	// Si hay un bloque sólido en los pies, intentamos subirlo si el objetivo está arriba o al mismo nivel.
 	if n.world.Block(checkPos).Solid() && dy >= -0.5 {
-		newY += 0.5 // Salto para subir el bloque
+		newY += 1.1 // Salto completo para subir el bloque
 	} else if dy < -0.1 {
 		// Si el objetivo está más abajo, permitimos que la gravedad (o el movimiento manual) lo baje.
-		// No forzamos un descenso brusco, pero permitimos que la posición horizontal avance.
 		if dist < 0.5 {
-			newY += dy * 0.2 // Suavizamos el descenso hacia el nodo inferior
+			newY += dy * 0.5 // Más agresivo al bajar hacia el nodo inferior
 		}
 	}
 
