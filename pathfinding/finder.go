@@ -33,11 +33,12 @@ func (p *Path) AtEnd() bool {
 }
 
 type Finder struct {
-	w api.World
+	w      api.World
+	Height int
 }
 
 func NewFinder(w api.World) *Finder {
-	return &Finder{w: w}
+	return &Finder{w: w, Height: 2}
 }
 
 func (f *Finder) SetWorld(w api.World) {
@@ -73,7 +74,7 @@ func (f *Finder) FindPath(start, end mmath.Pos) (Path, bool) {
 			// Si el vecino es sólido, intentamos subir (si no es el movimiento hacia arriba/abajo ya)
 			if i > 1 && !f.isWalkable(neighborPos) {
 				up := neighborPos.Side(1)
-				if f.isWalkable(up) && !f.w.Block(current.Pos.Side(1)).Solid() {
+				if f.isWalkable(up) && !f.w.Block(current.Pos.Side(1).Add(0, f.Height-1, 0)).Solid() {
 					neighborPos = up
 				} else {
 					// Si no es transitable, probamos si es un escalón hacia abajo
@@ -105,6 +106,11 @@ func (f *Finder) isWalkable(pos mmath.Pos) bool {
 	b := f.w.Block(pos)
 	if b.Solid() {
 		return false
+	}
+	for h := 1; h < f.Height; h++ {
+		if f.w.Block(pos.Add(0, h, 0)).Solid() {
+			return false
+		}
 	}
 	below := f.w.Block(pos.Side(0))
 	return below.Solid()

@@ -11,9 +11,9 @@ import (
 type Navigator struct {
 	entity api.Entity
 	world  api.World
-	finder *pathfinding.Finder
+	Finder *pathfinding.Finder
 
-	Path pathfinding.Path
+	Path  pathfinding.Path
 	Speed float64
 }
 
@@ -22,7 +22,7 @@ func NewNavigator(e api.Entity, w api.World) *Navigator {
 	return &Navigator{
 		entity: e,
 		world:  w,
-		finder: pathfinding.NewFinder(w),
+		Finder: pathfinding.NewFinder(w),
 		Speed:  0.1,
 	}
 }
@@ -30,7 +30,7 @@ func NewNavigator(e api.Entity, w api.World) *Navigator {
 // Sync updates the current world reference to ensure fresh transactions.
 func (n *Navigator) Sync(w api.World) {
 	n.world = w
-	n.finder.SetWorld(w)
+	n.Finder.SetWorld(w)
 }
 
 // SetTarget calculates a new path to the target position.
