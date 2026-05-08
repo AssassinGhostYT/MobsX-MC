@@ -6,6 +6,7 @@ import (
 	"github.com/AssassinGhostYT/MobsX-MC"
 	"github.com/AssassinGhostYT/MobsX-MC/sensor"
 	goMath "math"
+	"time"
 )
 
 // AttackBehavior makes an entity chase and attack a detected player.
@@ -15,16 +16,22 @@ type AttackBehavior struct {
 	
 	// AttackRange is the distance at which the entity will stop and deal damage.
 	AttackRange float64
+	// Damage is the amount of damage dealt per attack.
+	Damage float64
+	// Cooldown is the duration between attacks.
+	Cooldown time.Duration
 	
-	lastStrike int64 // Tick of the last attack
+	lastStrike time.Time // Time of the last attack
 }
 
 // NewAttack creates a new attack behavior with a default range of 1.2 blocks.
 func NewAttack(s *sensor.PlayerSensor, n *mobsx.Navigator) *AttackBehavior {
 	return &AttackBehavior{
-		sensor:    s,
-		navigator: n,
+		sensor:      s,
+		navigator:   n,
 		AttackRange: 1.2,
+		Damage:      3.0,
+		Cooldown:    time.Second,
 	}
 }
 
@@ -59,6 +66,12 @@ func (a *AttackBehavior) Run(e api.Entity, world api.World) {
 		yaw := float32(angle * 180 / goMath.Pi) - 90
 		e.SetRotation(yaw, 0)
 		
+		// Attack if cooldown passed
+		if time.Since(a.lastStrike) >= a.Cooldown {
+			e.Attack(target, a.Damage)
+			a.lastStrike = time.Now()
+		}
+
 		// Clear path to stop moving
 		a.navigator.Path.Nodes = nil
 		return

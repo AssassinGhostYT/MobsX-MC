@@ -40,4 +40,6 @@ type Entity interface {
 	HideInBlock(pos mmath.Pos)
 	// AlertOthers signals other entities of the same type within a range.
 	AlertOthers(rangeX, rangeY, rangeZ int)
+	// Attack deals damage to the target entity.
+	Attack(target Entity, damage float64)
 }
