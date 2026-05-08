@@ -36,6 +36,11 @@ func (m *Brain) AddBehavior(b Behavior) {
 	m.behaviors = append(m.behaviors, b)
 }
 
+// Sensors returns the sensors added to the brain.
+func (m *Brain) Sensors() []Sensor {
+	return m.sensors
+}
+
 func (m *Brain) Tick(e api.Entity, w api.World) {
 	for _, s := range m.sensors {
 		s.Scan(e, w)
