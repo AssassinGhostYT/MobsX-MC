@@ -69,21 +69,12 @@ func (n *Navigator) Tick() {
 	newX := currentPos[0] + goMath.Cos(angle)*n.Speed
 	newZ := currentPos[2] + goMath.Sin(angle)*n.Speed
 	
-	newY := currentPos[1]
-	// Comprobamos si el bloque delante es sólido para saltar (stepHeight 1.0)
-	checkPos := mmath.Pos{int(goMath.Floor(newX)), int(goMath.Floor(currentPos[1])), int(goMath.Floor(newZ))}
-	
 	// Si hay un bloque sólido en los pies, intentamos subirlo si el objetivo está arriba o al mismo nivel.
 	if n.world.Block(checkPos).Solid() && dy >= -0.5 {
-		newY += 1.1 // Salto completo para subir el bloque
-	} else if dy < -0.1 {
-		// Si el objetivo está más abajo, permitimos que la gravedad (o el movimiento manual) lo baje.
-		if dist < 0.5 {
-			newY += dy * 0.5 // Más agresivo al bajar hacia el nodo inferior
-		}
+		n.entity.Jump()
 	}
 
-	n.entity.SetPosition([3]float64{newX, newY, newZ})
+	n.entity.SetPosition([3]float64{newX, currentPos[1], newZ})
 	
 	yaw := float32(angle * 180 / goMath.Pi) - 90
 	n.entity.SetRotation(yaw, 0)
