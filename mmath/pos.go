@@ -33,3 +33,8 @@ func (p Pos) Side(face int) Pos {
 func (p Pos) Distance(other Pos) float64 {
 	return math.Sqrt(float64((p[0]-other[0])*(p[0]-other[0]) + (p[1]-other[1])*(p[1]-other[1]) + (p[2]-other[2])*(p[2]-other[2])))
 }
+
+// Add adds the given coordinates to the position and returns the result.
+func (p Pos) Add(x, y, z int) Pos {
+	return Pos{p[0] + x, p[1] + y, p[2] + z}
+}
