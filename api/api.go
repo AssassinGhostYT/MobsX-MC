@@ -42,4 +42,6 @@ type Entity interface {
 	AlertOthers(rangeX, rangeY, rangeZ int)
 	// Attack deals damage to the target entity.
 	Attack(target Entity, damage float64)
+	// HeldItem returns the identifier and metadata of the item held by the entity.
+	HeldItem() (name string, meta int16)
 }
