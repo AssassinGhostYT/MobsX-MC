@@ -112,8 +112,16 @@ func (f *Finder) isWalkable(pos mmath.Pos) bool {
 			return false
 		}
 	}
-	below := f.w.Block(pos.Side(0))
-	return below.Solid()
+	
+	// Cliff avoidance: Check depth (max 3 blocks drop for chickens)
+	foundGround := false
+	for d := 1; d <= 4; d++ {
+		if f.w.Block(pos.Add(0, -d, 0)).Solid() {
+			foundGround = true
+			break
+		}
+	}
+	return foundGround
 }
 
 func (f *Finder) reconstructPath(endNode *Node) Path {

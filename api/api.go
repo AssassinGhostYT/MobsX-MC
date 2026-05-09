@@ -44,4 +44,6 @@ type Entity interface {
 	Attack(target Entity, damage float64)
 	// HeldItem returns the identifier and metadata of the item held by the entity.
 	HeldItem() (name string, meta int16)
+	// Panicking returns true if the entity is in a panic state.
+	Panicking() bool
 }
