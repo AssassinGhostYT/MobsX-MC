@@ -38,7 +38,7 @@ func (n *Navigator) SetTarget(target mmath.Pos) bool {
 	pos := n.entity.Position()
 	start := mmath.Pos{int(goMath.Floor(pos[0])), int(goMath.Floor(pos[1])), int(goMath.Floor(pos[2]))}
 	
-	path, ok := n.finder.FindPath(start, target)
+	path, ok := n.Finder.FindPath(start, target)
 	if ok {
 		n.Path = path
 	}
